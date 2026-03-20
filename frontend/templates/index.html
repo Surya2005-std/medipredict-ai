@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediPredict AI – Disease Symptom Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- ───────── NOISE TEXTURE OVERLAY ───────── -->
+<div class="noise-overlay"></div>
+
+<!-- ───────── NAVIGATION ───────── -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="brand-icon">⚕</span>
+    <span class="brand-name">MediPredict<sup>AI</sup></span>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link active">Predictor</a>
+    <a href="/dashboard" class="nav-link">Dashboard</a>
+  </div>
+</nav>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <span class="hero-badge">AI-Powered Medical Intelligence</span>
+    <h1 class="hero-title">What's your body<br><em>trying to tell you?</em></h1>
+    <p class="hero-sub">Select your symptoms below. Our machine learning model trained on 41 diseases and 132 clinical indicators will identify the most likely conditions — and guide you toward care.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="stat-acc">—</span><span class="stat-lbl">Accuracy</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">41</span><span class="stat-lbl">Diseases</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">132</span><span class="stat-lbl">Symptoms</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── MAIN PREDICTOR ───────── -->
+<main class="predictor-section">
+  <div class="container">
+
+    <!-- LEFT: Symptom Input -->
+    <div class="panel input-panel">
+      <div class="panel-header">
+        <h2>Select Symptoms</h2>
+        <p>Search and add all symptoms you're experiencing</p>
+      </div>
+
+      <!-- Search box -->
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="symptom-search"
+          class="search-input"
+          placeholder="Type a symptom (e.g. headache, fever…)"
+          autocomplete="off"
+        >
+        <div class="search-dropdown" id="search-dropdown"></div>
+      </div>
+
+      <!-- Selected chips -->
+      <div class="chips-label">Selected symptoms <span id="chip-count" class="chip-badge">0</span></div>
+      <div class="chips-container" id="chips-container">
+        <div class="chips-empty" id="chips-empty">No symptoms selected yet</div>
+      </div>
+
+      <!-- Severity meter -->
+      <div class="severity-block" id="severity-block" style="display:none">
+        <div class="severity-header">
+          <span>Symptom Severity Score</span>
+          <span id="severity-value" class="severity-num">0</span>
+        </div>
+        <div class="severity-bar-track">
+          <div class="severity-bar-fill" id="severity-bar"></div>
+        </div>
+        <div class="severity-labels">
+          <span>Mild</span><span>Moderate</span><span>Severe</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="action-row">
+        <button class="btn-clear" id="btn-clear">Clear all</button>
+        <button class="btn-predict" id="btn-predict" disabled>
+          <span id="predict-text">Analyse Symptoms</span>
+          <span id="predict-spinner" class="spinner" style="display:none"></span>
+        </button>
+      </div>
+
+      <!-- Quick-select presets -->
+      <div class="presets">
+        <span class="presets-label">Try a preset:</span>
+        <button class="preset-btn" data-symptoms="high_fever,headache,chills,muscle_pain,sweating">Malaria-like</button>
+        <button class="preset-btn" data-symptoms="cough,breathlessness,high_fever,phlegm,chest_pain">Respiratory</button>
+        <button class="preset-btn" data-symptoms="fatigue,weight_loss,polyuria,excessive_hunger">Metabolic</button>
+        <button class="preset-btn" data-symptoms="itching,skin_rash,nodal_skin_eruptions">Skin</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="panel results-panel" id="results-panel">
+      <div class="results-placeholder" id="results-placeholder">
+        <div class="placeholder-icon">🩺</div>
+        <h3>Your diagnosis will appear here</h3>
+        <p>Add at least one symptom and click <strong>Analyse Symptoms</strong></p>
+      </div>
+
+      <!-- Loaded results (hidden initially) -->
+      <div class="results-content" id="results-content" style="display:none">
+        <div class="results-header">
+          <h2>Analysis Results</h2>
+          <span class="model-badge" id="model-badge"></span>
+        </div>
+
+        <div class="result-cards" id="result-cards"></div>
+
+        <div class="matched-symptoms-section">
+          <h4>Matched Symptoms</h4>
+          <div class="matched-chips" id="matched-chips"></div>
+        </div>
+
+        <div class="disclaimer">
+          ⚠️ <strong>Medical Disclaimer:</strong> This tool is for informational purposes only and does not replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider.
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div class="results-error" id="results-error" style="display:none">
+        <span class="error-icon">❌</span>
+        <p id="error-message">Something went wrong.</p>
+        <button class="btn-retry" onclick="resetError()">Try Again</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ───────── CHATBOT FAB ───────── -->
+<button class="chatbot-fab" id="chatbot-fab" title="Ask AI Assistant">💬</button>
+
+<!-- ───────── CHATBOT PANEL ───────── -->
+<div class="chatbot-panel" id="chatbot-panel">
+  <div class="chatbot-header">
+    <span>MediBot Assistant</span>
+    <button class="chatbot-close" id="chatbot-close">✕</button>
+  </div>
+  <div class="chatbot-messages" id="chatbot-messages">
+    <div class="chat-msg bot">
+      Hello! I'm MediBot 🤖. Tell me your symptoms in plain language and I'll help identify them. For example: <em>"I have a fever, headache and body ache"</em>
+    </div>
+  </div>
+  <div class="chatbot-input-row">
+    <input type="text" id="chatbot-input" placeholder="Describe your symptoms…" />
+    <button id="chatbot-send">↑</button>
+  </div>
+</div>
+
+<!-- ───────── FOOTER ───────── -->
+<footer class="footer">
+  <p>MediPredict AI · Built with Python, Flask & scikit-learn · For educational purposes only</p>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

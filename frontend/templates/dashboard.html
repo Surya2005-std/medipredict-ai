@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediPredict AI – Model Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+<div class="noise-overlay"></div>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="brand-icon">⚕</span>
+    <span class="brand-name">MediPredict<sup>AI</sup></span>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link">Predictor</a>
+    <a href="/dashboard" class="nav-link active">Dashboard</a>
+  </div>
+</nav>
+
+<section class="dash-hero">
+  <div class="container">
+    <h1>Model Evaluation <em>Dashboard</em></h1>
+    <p>Real-time metrics from the trained ML pipeline — accuracy, precision, recall and F1 across all candidate models.</p>
+  </div>
+</section>
+
+<main class="dash-main">
+  <div class="container">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-row" id="kpi-row">
+      <div class="kpi-card skeleton"></div>
+      <div class="kpi-card skeleton"></div>
+      <div class="kpi-card skeleton"></div>
+      <div class="kpi-card skeleton"></div>
+    </div>
+
+    <!-- MODEL TABLE -->
+    <div class="dash-panel">
+      <h3>All Model Scores</h3>
+      <div class="table-wrapper">
+        <table class="metrics-table" id="metrics-table">
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>Accuracy</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+              <th>CV Mean ± Std</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="metrics-tbody">
+            <tr><td colspan="7" style="text-align:center;padding:2rem;color:#888">Loading metrics…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="dash-charts">
+      <div class="dash-panel chart-panel">
+        <h3>Model Comparison</h3>
+        <img id="comparison-img" src="/static/models/model_comparison.png" alt="Model comparison chart" class="chart-img">
+      </div>
+      <div class="dash-panel chart-panel">
+        <h3>Feature Importance</h3>
+        <img id="importance-img" src="/static/models/feature_importance.png" alt="Feature importance chart" class="chart-img">
+      </div>
+    </div>
+
+    <div class="dash-panel">
+      <h3>Confusion Matrix (Best Model)</h3>
+      <img id="confusion-img" src="/static/models/confusion_matrix.png" alt="Confusion matrix" class="chart-img chart-img--wide">
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <p>MediPredict AI · Built with Python, Flask & scikit-learn · For educational purposes only</p>
+</footer>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>

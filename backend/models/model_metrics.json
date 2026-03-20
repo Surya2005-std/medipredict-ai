@@ -1,0 +1,35 @@
+{
+  "Random Forest": {
+    "accuracy": 0.9939,
+    "precision": 0.9942,
+    "recall": 0.9939,
+    "f1": 0.9939,
+    "cv_mean": 0.9949,
+    "cv_std": 0.0016
+  },
+  "Gradient Boosting": {
+    "accuracy": 0.9726,
+    "precision": 0.9742,
+    "recall": 0.9726,
+    "f1": 0.9726,
+    "cv_mean": 0.9787,
+    "cv_std": 0.0045
+  },
+  "SVM (RBF)": {
+    "accuracy": 0.9939,
+    "precision": 0.994,
+    "recall": 0.9939,
+    "f1": 0.9939,
+    "cv_mean": 0.9972,
+    "cv_std": 0.0009
+  },
+  "Naive Bayes": {
+    "accuracy": 0.8557,
+    "precision": 0.8795,
+    "recall": 0.8557,
+    "f1": 0.8601,
+    "cv_mean": 0.795,
+    "cv_std": 0.0181
+  },
+  "best_model": "Random Forest"
+}
